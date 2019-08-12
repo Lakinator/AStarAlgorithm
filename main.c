@@ -9,23 +9,25 @@
 #define tile_open 7
 #define tile_closed 9
 
-void draw(int grid[128][128], int width, int height);
-void drawFinalPath(int grid[128][128], int width, int height, POINT *lastPoint, POINT *start, POINT *end);
+void draw(int **grid, int width, int height);
+void drawFinalPath(int **grid, int width, int height, POINT *lastPoint, POINT *start, POINT *end);
 int manhattanDistance(POINT *p1, POINT *p2);
 POINT *lowestFScore(LIST *list);
 
 int main(int argc, char *argv[])
 {
-    int width = 128, height = 128;
-    int grid[128][128];
+
+    /* FILE DATA */
+
+    int width = 0, height = 0;
+    int **grid;
 
     POINT start;
     POINT end;
 
     /* READING FILE */
 
-    char fileName[80];
-    char ch[128];
+    char fileName[80], line[256];
     FILE *fp;
 
     printf("Enter .amap file name:\n");
@@ -42,16 +44,19 @@ int main(int argc, char *argv[])
 
     int index = 0;
     int f_x = 0, f_y = 0;
-    while (fgets(ch, 128, fp))
+    while (fgets(line, 256, fp))
     {
         if (index == 0)
         {
-            sscanf(ch, "%d", &width);
+            sscanf(line, "%d", &width);
+            grid = malloc(width * sizeof(int *));
             index++;
         }
         else if (index == 1)
         {
-            sscanf(ch, "%d", &height);
+            sscanf(line, "%d", &height);
+            for (int i = 0; i < width; i++)
+                grid[i] = malloc(height * sizeof(int));
             index++;
         }
         else
@@ -59,7 +64,7 @@ int main(int argc, char *argv[])
             f_x = 0;
             for (; f_x < width; f_x++)
             {
-                grid[f_x][f_y] = ch[f_x] - '0';
+                grid[f_x][f_y] = line[f_x] - '0';
 
                 if (grid[f_x][f_y] == 2)
                 {
@@ -221,13 +226,29 @@ int main(int argc, char *argv[])
         printf("No path found!");
     }
 
+    /* FREE MEMORY */
+
+    while (open.len > 0)
+    {
+        l_deleteNodeAt(&open, open.len - 1);
+    }
+
+    while (closed.len > 0)
+    {
+        l_deleteNodeAt(&closed, closed.len - 1);
+    }
+
+    for (int i = 0; i < width; i++)
+        free(grid[i]);
+    free(grid);
+
     printf("\n");
     system("pause");
 
     return 0;
 }
 
-void draw(int grid[128][128], int width, int height)
+void draw(int **grid, int width, int height)
 {
     for (int i = 0; i < height; i++)
     {
@@ -242,7 +263,7 @@ void draw(int grid[128][128], int width, int height)
     }
 }
 
-void drawFinalPath(int grid[128][128], int width, int height, POINT *lastPoint, POINT *start, POINT *end)
+void drawFinalPath(int **grid, int width, int height, POINT *lastPoint, POINT *start, POINT *end)
 {
     LIST path = (LIST){.len = 0};
 
