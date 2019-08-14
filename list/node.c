@@ -33,6 +33,7 @@ int n_deleteNodeAt(NODE *node, int pos)
         NODE *n = node->next;
         node->next = n->next;
         free(n);
+        return 1;
     }
     else
     {
