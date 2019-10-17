@@ -9,6 +9,10 @@
 #define tile_open 7
 #define tile_closed 9
 
+#define SUCCESS 0
+#define ARG_ERROR 1
+#define FILE_ERROR 2
+
 void draw(int **grid, int width, int height);
 void drawFinalPath(int **grid, int width, int height, POINT *lastPoint, POINT *start, POINT *end);
 int manhattanDistance(POINT *p1, POINT *p2);
@@ -25,21 +29,25 @@ int main(int argc, char *argv[])
     POINT start;
     POINT end;
 
-    /* READING FILE */
+    /* READING FILE FROM ARGV */
+    // ARG1 := Filepath
+    // ARG2 := Debug (optional)
 
-    char fileName[80], line[256];
+    if (argc != 2 && argc != 3)
+    {
+        printf("Incomplete arguments.\nUsage: %s filePath [-d]\n", argv[0]);
+        return ARG_ERROR;
+    }
+
+    char line[256];
     FILE *fp;
 
-    printf("Enter .amap file name:\n");
-    gets(fileName);
-
-    fp = fopen(fileName, "r");
+    fp = fopen(argv[1], "r");
 
     if (fp == NULL)
     {
-        printf("Error while opening the file.\n");
-        system("pause");
-        return 0;
+        printf("Error while opening the file.\nUsage: %s filePath [-d]\n", argv[0]);
+        return FILE_ERROR;
     }
 
     int index = 0;
@@ -66,12 +74,12 @@ int main(int argc, char *argv[])
             {
                 grid[f_x][f_y] = line[f_x] - '0';
 
-                if (grid[f_x][f_y] == 2)
+                if (grid[f_x][f_y] == tile_start)
                 {
                     start.x = f_x;
                     start.y = f_y;
                 }
-                else if (grid[f_x][f_y] == 3)
+                else if (grid[f_x][f_y] == tile_end)
                 {
                     end.x = f_x;
                     end.y = f_y;
@@ -212,9 +220,9 @@ int main(int argc, char *argv[])
 
     /* DEBUG DRAW */
 
-    if (argc == 2)
+    if (argc == 3)
     {
-        if (strcmp(argv[1], "-d\n"))
+        if (strcmp(argv[2], "-d\n"))
         {
             printf("\nDebug:\n");
             draw(grid, width, height);
@@ -243,9 +251,8 @@ int main(int argc, char *argv[])
     free(grid);
 
     printf("\n");
-    system("pause");
 
-    return 0;
+    return SUCCESS;
 }
 
 void draw(int **grid, int width, int height)

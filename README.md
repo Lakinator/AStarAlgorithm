@@ -1,8 +1,11 @@
 # AStarAlgorithm
-Very basic implementation of the A* algorithm in C
+Basic implementation of the A* algorithm in C
 
 ## About
->- -d for debug information
+
+#### Command line arguments
+>- filepath
+>- [-d]
 
 #### Numbers
 ```
@@ -24,7 +27,7 @@ tile_closed = 9 //only for debug
 [][][][][][]...
 ```
 
-#### Example [grid.amap](https://github.com/Lakinator/AStarAlgorithm/blob/master/grid.amap)
+#### Example 1 [grid.amap](https://github.com/Lakinator/AStarAlgorithm/blob/master/grid.amap)
 ```
 13
 8
@@ -37,4 +40,19 @@ tile_closed = 9 //only for debug
 1000100000001
 1111111111111
 ```
-![example](https://i.imgur.com/d8IfA60.png)
+![example](https://i.imgur.com/P2pG1to.png)
+
+#### Example 2 [grid2.amap](https://github.com/Lakinator/AStarAlgorithm/blob/master/grid2.amap)
+```
+32
+8
+11111111111111111111111111111111
+10001000000010000000010100000001
+10001000010010000000000100000001
+10001000000010000000100000001101
+10201010000000000001000000000001
+10100000000010000010001111000001
+10001000000010000010000000300001
+11111111111111111111111111111111
+```
+![example](https://i.imgur.com/4ua8edm.png)
