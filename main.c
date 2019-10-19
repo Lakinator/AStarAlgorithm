@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
     POINT walkableTiles[4];
     int walkableTilesCount = 0;
 
-    l_insertFirst(&open, (POINT){.x = 2, .y = 4, .scoreF = manhattanDistance(&start, &end), .scoreG = 0, .scoreH = manhattanDistance(&start, &end), .parent = NULL});
+    l_insertFirst(&open, (POINT){.x = start.x, .y = start.y, .scoreF = manhattanDistance(&start, &end), .scoreG = 0, .scoreH = manhattanDistance(&start, &end), .parent = NULL});
 
     /* START */
 
